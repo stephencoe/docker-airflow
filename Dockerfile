@@ -75,6 +75,13 @@ RUN set -ex \
 COPY script/entrypoint.sh /entrypoint.sh
 COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
 
+# s3 logging
+# @see https://gist.github.com/sebradloff/48b1f6066ae592226a354869921d964a
+COPY config/log_config.py ${AIRFLOW_HOME}/config/log_config.py
+COPY config/__init__.py ${AIRFLOW_HOME}/config/__init__.py
+ENV PYTHONPATH ${PYTHONPATH}:/usr/lib/python2.7/site-packages/:${AIRFLOW_HOME}/config/
+
+COPY requirements.txt /requirements.txt
 RUN chown -R airflow: ${AIRFLOW_HOME}
 
 EXPOSE 8080 5555 8793
